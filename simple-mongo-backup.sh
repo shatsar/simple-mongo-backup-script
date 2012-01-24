@@ -8,13 +8,23 @@ LOGS_LOCATION=~/backup/logs
 DIR_NAME=db-`date +%Y%m%d`
 DIR_NAME_ABS=$DUMP_LOCATION/$DIR_NAME
 COPY_SSH_DEST=server1:$DIR_NAME_ABS
+#USERNAME="username"
+#PASSWORD="password"
 ##--
 
+AUTH=""
+
+if [ ! -z "$USERNAME" ]
+	then
+	AUTH=" -u $USERNAME -p $PASSWORD";
+fi
+
 echo "Starting backup `date`"
+exit 1
 for DB in $DBS
 do
 	echo "Backup: $DB"
-	mongodump --db $DB --out $DIR_NAME_ABS
+	mongodump --db $DB $AUTH --out $DIR_NAME_ABS
 	tar -czf $DUMP_LOCATION/$DB-`date +%Y%m%d`.tgz --remove-files --directory $DUMP_LOCATION $DIR_NAME
 	scp	$DUMP_LOCATION/$DB-`date +%Y%m%d`.tgz $COPY_SSH_DEST
 done
