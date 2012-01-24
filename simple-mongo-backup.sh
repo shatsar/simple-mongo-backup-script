@@ -14,13 +14,13 @@ COPY_SSH_DEST=server1:$DIR_NAME_ABS
 
 AUTH=""
 
-if [ ! -z "$USERNAME" ]
+if [ -n "$USERNAME" ]
 	then
 	AUTH=" -u $USERNAME -p $PASSWORD";
 fi
 
 echo "Starting backup `date`"
-exit 1
+
 for DB in $DBS
 do
 	echo "Backup: $DB"
